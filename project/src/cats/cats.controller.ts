@@ -2,18 +2,22 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
+  //   HttpException,
   Param,
   ParseIntPipe,
   Patch,
   Post,
   Put,
   UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
-import { HttpExceptionFilter } from 'src/http-exception.filter';
+import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
 @Controller('cats')
+// 인터셉터 의존성 주입
+@UseInterceptors(SuccessInterceptor)
 // class 전역에 사용 가능
 @UseFilters(HttpExceptionFilter)
 export class CatsController {
@@ -25,8 +29,9 @@ export class CatsController {
   //   @UseFilters(HttpExceptionFilter) --> class 안의 일부분일 떄 사용
   getAllCat() {
     // throw new HttpException({ success: false, message: 'api is broken' }, 401);
-    throw new HttpException('api is broken', 401);
-    return 'get all cat api';
+    // throw new HttpException('api is broken', 401);
+    console.log('Hello Controller');
+    return { cats: 'get all cat api' };
   }
   // cats/:id
   @Get(':id')

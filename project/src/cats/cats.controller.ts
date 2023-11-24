@@ -25,39 +25,31 @@ export class CatsController {
 
   // cats/
   @Get()
-  // 아래 throw new HttpException에서 발생된 Exception이 UseFilters를 통해 HttpExceptionFilter에 필터링되어 response에 전달이 된다.
-  //   @UseFilters(HttpExceptionFilter) --> class 안의 일부분일 떄 사용
-  getAllCat() {
-    // throw new HttpException({ success: false, message: 'api is broken' }, 401);
-    // throw new HttpException('api is broken', 401);
-    console.log('Hello Controller');
-    return { cats: 'get all cat api' };
+  getCurrentCat() {
+    return 'current cat';
   }
-  // cats/:id
-  @Get(':id')
-  getOneCat(@Param('id', ParseIntPipe) param: number) {
-    console.log(param);
-    console.log(typeof param);
-    return 'get one cat api';
-  }
+
   // cats/
   @Post()
-  createCat() {
-    return 'create cat api';
+  async signUp() {
+    return 'signup';
   }
-  // cats/:id
-  @Put(':id')
-  updateCat() {
-    return 'update cat api';
+
+  // cats/login/
+  @Post('login')
+  async login() {
+    return 'login';
   }
-  // cats/:id
-  @Patch(':id')
-  updatePartialCat() {
-    return 'update partial cat api';
+
+  // cats/logout/
+  @Post('logout')
+  async logout() {
+    return 'logout';
   }
-  // cats/:id
-  @Delete(':id')
-  deleteCat() {
-    return 'delete service';
+
+  // cats/upload/cats/
+  @Post('upload/cats')
+  uploadCatImg() {
+    return 'uploadimg';
   }
 }

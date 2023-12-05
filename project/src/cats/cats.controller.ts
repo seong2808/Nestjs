@@ -5,6 +5,7 @@ import {
   //   HttpException,
   Post,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
@@ -15,6 +16,8 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ReadOnlyCatDto } from './dto/cat.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { LoginRequestDto } from 'src/auth/dto/login.request.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { CurrentUser } from 'src/common/decorators/user.decorator';
 
 @Controller('cats')
 // 인터셉터 의존성 주입
@@ -29,9 +32,10 @@ export class CatsController {
 
   // cats/
   @ApiOperation({ summary: '현재 고양이 가져오기' })
+  @UseGuards(JwtAuthGuard)
   @Get()
-  getCurrentCat() {
-    return 'current cat';
+  getCurrentCat(@CurrentUser() cat) {
+    return cat.readOnlyData;
   }
 
   // cats/
@@ -58,6 +62,7 @@ export class CatsController {
   }
 
   // cats/logout/
+  // 로그아웃 api를 필요없음, 프론트에서 jwt 삭제하면 로그아웃이 된다.
   @ApiOperation({ summary: '로그아웃' })
   @Post('logout')
   async logout() {

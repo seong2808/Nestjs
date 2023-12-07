@@ -10,6 +10,14 @@ import { CatRequestDto } from './dto/cats.request.dto';
 export class CatsRepository {
   constructor(@InjectModel(Cat.name) private readonly catModel: Model<Cat>) {}
 
+  async findByIdAndUpdateImg(id: string, fileName: string) {
+    const cat = await this.catModel.findById(id);
+    cat.imgUrl = `http://localhost:8000/media/${fileName}`;
+    const newCat = await cat.save();
+    console.log(newCat);
+    return newCat.readOnlyData;
+  }
+
   async findCatByIdWithoutPassword(catId: string): Promise<Cat | null> {
     // select 매서드를 통해 비밀번호는 제외하고 가져온다!
     // 보안상 이유로 request.user에 저장할 때, password 필드를 제외하고 저장하는 것이 좋습니다.

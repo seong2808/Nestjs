@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsPositive, IsString } from 'class-validator';
+import { IsNotEmpty, IsPositive, IsString } from 'class-validator';
 import { Document, HydratedDocument, SchemaOptions, Types } from 'mongoose';
 
 const options: SchemaOptions = {
   timestamps: true,
 };
 
-export type CatDocument = HydratedDocument<Comments>;
+export type CommentsDocument = HydratedDocument<Comments>;
 
 @Schema(options)
 export class Comments extends Document {
@@ -40,9 +40,8 @@ export class Comments extends Document {
     required: true,
   })
   @Prop({ type: Types.ObjectId, require: true, ref: 'cats' })
-  @IsEmail()
   @IsNotEmpty()
   info: Types.ObjectId;
 }
 
-export const CatSchema = SchemaFactory.createForClass(Comments);
+export const CommentsSchema = SchemaFactory.createForClass(Comments);

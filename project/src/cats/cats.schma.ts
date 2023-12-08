@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { Document, HydratedDocument, SchemaOptions } from 'mongoose';
+import { Comments } from 'src/comments/comments.schema';
 
 const options: SchemaOptions = {
   timestamps: true,
@@ -53,16 +54,34 @@ export class Cat extends Document {
     email: string;
     name: string;
     imgUrl: string;
+    comments: Comments[];
   };
+
+  readonly comments: Comments[];
 }
 
-export const CatSchema = SchemaFactory.createForClass(Cat);
+export const _CatSchema = SchemaFactory.createForClass(Cat);
 
-CatSchema.virtual('readOnlyData').get(function (this: Cat) {
+_CatSchema.virtual('readOnlyData').get(function (this: Cat) {
   return {
     id: this.id,
     email: this.email,
     name: this.name,
     imgUrl: this.imgUrl,
+    comments: this.comments,
   };
 });
+
+_CatSchema.virtual('comments', {
+  ref: 'comments',
+  localField: '_id',
+  // Comments 스키마의 info에 대해서 가져온다. (외래키라고 생각하면 좋을 것 같다.)
+  foreignField: 'info',
+});
+// populate(다른 Document와 이어줄 수 있는 매서드라고 생각하자)를 사용할 때 필요한 옵션 2가지!
+// 객체로 변환이 가능
+_CatSchema.set('toObject', { virtuals: true });
+// JSON 형식으로 변환이 가능
+_CatSchema.set('toJSON', { virtuals: true });
+
+export const CatSchema = _CatSchema;

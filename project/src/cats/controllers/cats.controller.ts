@@ -87,4 +87,10 @@ export class CatsController {
     // return { image: `http://localhost:8000/media/cats/${files[0].filename}` };
     return this.catsService.uploadImg(cat, files);
   }
+
+  @ApiOperation({ summary: '모든 고양이 가져오기' })
+  @Get('all')
+  getAllCat() {
+    return this.catsService.getAllCat();
+  }
 }

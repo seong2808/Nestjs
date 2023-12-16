@@ -16,7 +16,7 @@ import { CatRequestDto } from '../dtos/cats.request.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ReadOnlyCatDto } from '../dtos/cat.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { LoginRequestDto } from 'src/auth/dto/login.request.dto';
+import { LoginRequestDto } from 'src/auth/dtos/login.request.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';

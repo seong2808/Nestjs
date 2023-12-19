@@ -8,11 +8,15 @@ import { AuthModule } from 'src/auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { Comments, CommentsSchema } from 'src/comments/comments.schema';
 import { AwsService } from 'src/aws.service';
+import { memoryStorage } from 'multer';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     MulterModule.register({
       dest: './upload',
+      storage: memoryStorage(),
     }),
     MongooseModule.forFeature([
       { name: Comments.name, schema: CommentsSchema },

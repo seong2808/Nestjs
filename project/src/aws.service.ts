@@ -28,6 +28,8 @@ export class AwsService {
     contentType: string;
   }> {
     try {
+      console.log(file.buffer);
+      // 해당 replace는 공백을 지워준다.
       const key = `${folder}/${Date.now()}_${path.basename(
         file.originalname,
       )}`.replace(/ /g, '');
@@ -46,9 +48,27 @@ export class AwsService {
     }
   }
 
-  async deleteS3Object() {}
+  async deleteS3Object(
+    key: string,
+    callback?: (err: AWS.AWSError, data: AWS.S3.DeleteObjectOutput) => void,
+  ): Promise<{ success: true }> {
+    try {
+      await this.awsS3
+        .deleteObject(
+          {
+            Bucket: this.S3_BUCKET_NAME,
+            Key: key,
+          },
+          callback,
+        )
+        .promise();
+      return { success: true };
+    } catch (error) {
+      throw new BadRequestException(`Failed to delete file : ${error}`);
+    }
+  }
 
   public getAwsS3FileUrl(objectKey: string) {
-    return `https://${this.S3_BUCKET_NAME}.s3.amaconaws/${objectKey}`;
+    return `https://${this.S3_BUCKET_NAME}.s3.amazonaws.com/${objectKey}`;
   }
 }

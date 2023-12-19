@@ -21,9 +21,9 @@ export class CatsRepository {
     return result;
   }
 
-  async findByIdAndUpdateImg(id: string, fileName: string) {
+  async findByIdAndUpdateImg(id: string, imgUrl: string) {
     const cat = await this.catModel.findById(id);
-    cat.imgUrl = `http://localhost:8000/media/${fileName}`;
+    cat.imgUrl = imgUrl;
     const newCat = await cat.save();
     console.log(newCat);
     return newCat.readOnlyData;

@@ -20,7 +20,6 @@ import { LoginRequestDto } from 'src/auth/dtos/login.request.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { multerOptions } from 'src/common/utils/multer.options';
 import { Cat } from '../cats.schma';
 
 @Controller('cats')
@@ -75,7 +74,7 @@ export class CatsController {
 
   // cats/upload/cats/
   @ApiOperation({ summary: '고양이 이미지 업로드' })
-  @UseInterceptors(FilesInterceptor('image', 10, multerOptions('cats')))
+  @UseInterceptors(FilesInterceptor('image'))
   @UseGuards(JwtAuthGuard)
   @Post('upload')
   uploadCatImg(

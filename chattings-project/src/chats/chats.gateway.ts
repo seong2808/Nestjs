@@ -8,6 +8,7 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
+import { SocketAddress } from 'net';
 import { Socket } from 'socket.io';
 
 @WebSocketGateway({ namespace: 'chattings' })
@@ -20,10 +21,12 @@ export class ChatsGateway
     this.logger.log('constructor');
   }
 
+  // 유저 연결 해제
   handleDisconnect(@ConnectedSocket() socket: Socket) {
     this.logger.log(`Disconnected : ${socket.id} ${socket.nsp.name}`);
   }
 
+  // 유저 연결
   handleConnection(@ConnectedSocket() socket: Socket) {
     this.logger.log(`Connected : ${socket.id} ${socket.nsp.name}`);
   }
@@ -31,6 +34,7 @@ export class ChatsGateway
   afterInit() {
     this.logger.log('init');
   }
+
   @SubscribeMessage('new_user')
   handleNewUser(
     @MessageBody() username: string,
@@ -38,7 +42,18 @@ export class ChatsGateway
   ) {
     // username db에 적재
     socket.broadcast.emit('user_connected', username);
-
     return username;
+  }
+
+  @SubscribeMessage('submit_chat')
+  handleSubmitChat(
+    @MessageBody() chat: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    // 연결된 모든 소켓들에게 보내기 위해 Broadcast
+    socket.broadcast.emit('new_chat', {
+      chat,
+      username: socket.id,
+    });
   }
 }

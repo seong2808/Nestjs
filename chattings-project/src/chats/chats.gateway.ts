@@ -8,7 +8,6 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { SocketAddress } from 'net';
 import { Socket } from 'socket.io';
 
 @WebSocketGateway({ namespace: 'chattings' })

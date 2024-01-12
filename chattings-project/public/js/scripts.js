@@ -24,7 +24,7 @@ const handleSubmit = (event) => {
   if (inputValues !== '') {
     socket.emit('submit_chat', inputValues);
     // 화면에다가 그리기
-    drawNewChat(`me : ${inputValues}`);
+    drawNewChat(`me : ${inputValues}`, true);
     event.target.elements[0].value = '';
   }
 };
@@ -32,13 +32,22 @@ const handleSubmit = (event) => {
 //* draw funtions
 const drawHelloStranger = (username) =>
   (helloStrangerElement.innerText = `Hello ${username} Stranger :)`);
-const drawNewChat = (message) => {
+const drawNewChat = (message, isMe = false) => {
   const wrapperChatBox = document.createElement('div');
-  const chatBox = `
-    <div>
+  wrapperChatBox.className = 'clearfix';
+  let chatBox;
+  if (!isMe)
+    chatBox = `
+    <div class='bg-gray-300 w-3/4 mx-4 my-2 p-2 rounded-lg clearfix break-all'>
       ${message}
     </div>
-  `;
+    `;
+  else
+    chatBox = `
+    <div class='bg-yellow-200 w-3/4 ml-auto mr-4 my-2 p-2 rounded-lg clearfix break-all'>
+      ${message}
+    </div>
+    `;
   wrapperChatBox.innerHTML = chatBox;
   chattingBoxElement.append(wrapperChatBox);
 };

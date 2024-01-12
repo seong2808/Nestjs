@@ -7,7 +7,7 @@ const helloStrangerElement = getElementById('hello_stranger');
 const chattingBoxElement = getElementById('chatting_box');
 const formElement = getElementById('chat_form');
 
-//* global socket  handler
+//* global socket handler
 socket.on('user_connected', (username) => {
   drawNewChat(`${username} connected!`);
 });
@@ -15,6 +15,7 @@ socket.on('new_chat', (data) => {
   const { chat, username } = data;
   drawNewChat(`${username} : ${chat}`);
 });
+socket.on('disconnect_user', (username) => drawNewChat(`${username}: bye...`));
 
 //* event callback function
 const handleSubmit = (event) => {
